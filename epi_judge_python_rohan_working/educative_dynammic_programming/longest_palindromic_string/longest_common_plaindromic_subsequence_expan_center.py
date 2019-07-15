@@ -1,26 +1,41 @@
 def find_LPS(s):
-    n = len(s)
-    dp = [[0 for _ in range(n)] for _ in range(n)]
+    maxLen = 1
+    start = 0
 
-    for i in range(n):
-        dp[i][i] = 1
+    length = len(s)
 
-    max_len = -1
-    for i in range(n-1, -1, -1):
-        for j in range(i + 1, n):
-            if s[i] == s[j]:
-                dp[i][j] = 2 + dp[i+1][j-1]
-            elif i+1 == j and s[i] == s[j]:
-                dp[i][j] = 2
-            else:
-                dp[i][j] = max(dp[i+1][j], dp[i][j-1])
-            max_len = max(max_len, dp[i][j])
-    #printing LPS
-    index = dp[0][n-1]
+    low = 0
+    high = 0
+
+    for i in range(1, length):
+
+        low = i -1
+        high = i
+
+        while low >= 0 and high < length and s[low] == s[high]:
+            if high - low + 1 > maxLen:
+                start = low
+                maxLen = high - low + 1
+            low -= 1
+            high += 1
+        # odd length
+        low = i -1
+        high = i + 1
+
+        while low >= 0 and high < length and s[low] == s[high]:
+            if high - low + 1 > maxLen:
+                start = low
+                maxLen = high - low + 1
+            low -= 1
+            high += 1
+
+    print(s[start: start+ maxLen])
 
 
 
-    return max_len
+
+
+    return maxLen
 #
 print(find_LPS("abdbea"))
 print(find_LPS("cddpd"))
